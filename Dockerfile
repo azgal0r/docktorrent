@@ -82,6 +82,9 @@ RUN echo "deb http://www.deb-multimedia.org jessie main" >> /etc/apt/sources.lis
 # IMPORTANT: Change the default login/password of ruTorrent before build
 RUN htpasswd -cb /usr/share/nginx/html/rutorrent/.htpasswd docktorrent p@ssw0rd
 
+#Dtach for rtorrent
+RUN apt-get update && apt-get install -q -y --no-install-recommends dtach
+
 # Copy config files
 COPY config/nginx/default /etc/nginx/sites-available/default
 COPY config/rtorrent/.rtorrent.rc /root/.rtorrent.rc
@@ -100,7 +103,7 @@ ENTRYPOINT ["/usr/local/bin/docktorrent"]
 EXPOSE 80 9527 45566
 
 # Declare volumes
-VOLUME ["/rtorrent", "/var/log"]
+VOLUME ["/rtorrent","/media_data", "/var/log"]
 
 # This should be removed in the latest version of Docker
 ENV HOME /root

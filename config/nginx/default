@@ -18,7 +18,7 @@ server {
 		include scgi_params;
 		scgi_send_timeout 10s;
 		scgi_read_timeout 10s;
-		scgi_pass  unix:/tmp/rpc.socket;
+		scgi_pass  localhost:5000;
 	}
 
 	location / {
