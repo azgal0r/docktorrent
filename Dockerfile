@@ -90,6 +90,16 @@ COPY config/nginx/default /etc/nginx/sites-available/default
 COPY config/rtorrent/.rtorrent.rc /root/.rtorrent.rc
 COPY config/rutorrent/config.php /usr/share/nginx/html/rutorrent/conf/config.php
 
+#SSL
+RUN apt-get install -q -y --no-install-recommends wget 
+RUN apt-get install -q -y --no-install-recommends ca-certificates
+
+RUN mkdir -p /etc/ssl/certs && \
+cd /etc/ssl/certs && \
+wget --no-check-certificate https://www.geotrust.com/resources/root_certificates/certificates/Equifax_Secure_Global_eBusiness_CA-1.cer && \
+mv Equifax_Secure_Global_eBusiness_CA-1.cer Equifax_Secure_Global_eBusiness_CA-1.pem && \ 
+update-ca-certificates
+
 # Add the s6 binaries fs layer
 ADD s6-1.1.3.2-musl-static.tar.xz /
 
@@ -100,7 +110,7 @@ COPY rootfs /
 ENTRYPOINT ["/usr/local/bin/docktorrent"]
 
 # Declare ports to expose
-EXPOSE 80 9527 45566
+EXPOSE 5000 80 9527 45566
 
 # Declare volumes
 VOLUME ["/rtorrent","/media_data", "/var/log"]

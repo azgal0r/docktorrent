@@ -17,4 +17,4 @@ if [ -f /rtorrent/.session/rtorrent.lock ]; then
 fi
 
 # Turn to rTorrent
-exec rtorrent
+exec rtorrent -o http_capath=/etc/ssl/certs
