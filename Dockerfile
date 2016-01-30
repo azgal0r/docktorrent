@@ -69,8 +69,14 @@ RUN apt-get update && apt-get install -q -y --no-install-recommends \
 # Install packages for ruTorrent plugins
 RUN apt-get update && apt-get install -q -y --no-install-recommends \
     mediainfo \
-    unrar-free \
-    unzip
+    unzip \
+    wget
+
+#Unrar non free
+WORKDIR /tmp
+RUN wget http://ftp.us.debian.org/debian/pool/non-free/u/unrar-nonfree/unrar_5.2.7-0.1_amd64.deb && \
+dpkg -i unrar_5.2.7-0.1_amd64.deb
+
 
 # For ffmpeg, which is required by the ruTorrent screenshots plugin
 # This increases ~53 MB of the image size, remove it if you really don't need screenshots
@@ -89,6 +95,7 @@ RUN apt-get update && apt-get install -q -y --no-install-recommends dtach
 COPY config/nginx/default /etc/nginx/sites-available/default
 COPY config/rtorrent/.rtorrent.rc /root/.rtorrent.rc
 COPY config/rutorrent/config.php /usr/share/nginx/html/rutorrent/conf/config.php
+COPY config/rutorrent/plugins.ini /usr/share/nginx/html/rutorrent/conf/plugins.ini
 
 #SSL
 RUN apt-get install -q -y --no-install-recommends wget 
@@ -107,7 +114,7 @@ ADD s6-1.1.3.2-musl-static.tar.xz /
 COPY rootfs /
 
 # Run the wrapper script first
-ENTRYPOINT ["/usr/local/bin/docktorrent"]
+#ENTRYPOINT ["/usr/local/bin/docktorrent"]
 
 # Declare ports to expose
 EXPOSE 5000 80 9527 45566
