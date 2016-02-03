@@ -1,0 +1,13 @@
+[Unit]
+Description=Rtorrent container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=simple
+RemainAfterExit=yes
+ExecStart=/usr/bin/startup_rtorrent.sh
+ExecStop=/usr/bin/docker stop -t 2 rtorrentcontainer ; /usr/bin/docker rm -f rtorrentcontainer
+
+[Install]
+WantedBy=multi-user.target
